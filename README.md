@@ -1,6 +1,6 @@
-# Platform Adventure Game 🎮
+# 🚀 Space Adventure Platform Game
 
-Un gioco platform dinamico creato con Kaboom.js dove devi raccogliere monete, evitare nemici e gestire piattaforme che scompaiono!
+Un eccitante gioco platform ambientato nello spazio, dove controlli un astronauta che deve raccogliere monete evitando UFO nemici!
 
 ## 📋 Indice
 - [Caratteristiche](#caratteristiche)
@@ -11,13 +11,13 @@ Un gioco platform dinamico creato con Kaboom.js dove devi raccogliere monete, ev
 - [Sistema di Punteggio](#sistema-di-punteggio)
 
 ## ✨ Caratteristiche
+- Grafica spaziale con astronauta e UFO
+- Sfondo stellato dinamico con stelle brillanti
+- Sistema di power-up con stella dell'invincibilità
 - Sistema di vite multiple
-- Monete da raccogliere
-- Nemici in movimento
-- Piattaforme che scompaiono
-- Sistema di punteggio
-- Effetti visivi (shake, fade)
-- Modalità attraversamento bordi schermo
+- Punteggio e record personale
+- Effetti particellari e visuali
+- Movimento fluido dei personaggi
 
 ## 🚀 Installazione
 
@@ -38,42 +38,78 @@ cd [nome-directory]
 ## 🎮 Come Giocare
 
 ### Controlli
-- **Freccia Sinistra** o **A**: Muovi a sinistra
-- **Freccia Destra** o **D**: Muovi a destra
-- **Spazio**: Salta
+- **Freccia Sinistra**: Muovi l'astronauta a sinistra
+- **Freccia Destra**: Muovi l'astronauta a destra
+- **Barra Spaziatrice**: Attiva il jetpack per saltare
 
-### Regole del Gioco
-1. **Obiettivo**: Raccogliere più monete possibili e sopravvivere il più a lungo possibile
-2. **Vite**: Inizi con 3 vite
-3. **Game Over**: Il gioco termina quando perdi tutte le vite
+### Obiettivi
+1. Raccogli più monete possibili per aumentare il punteggio
+2. Evita gli UFO nemici
+3. Usa le piattaforme per raggiungere le monete più alte
+4. Cerca di battere il tuo record personale
 
-### Sistema di Punteggio
-- **+50 punti**: Raccolta di una moneta
-- **+10 punti**: Ogni salto completato
-- **Penalità**: Perdita di una vita quando:
-  - Cadi fuori dallo schermo
-  - Colpisci un nemico
+## 👨‍🚀 Personaggi
 
-## ⚠️ Meccaniche Speciali
+### L'Astronauta (Giocatore)
+- Design: Astronauta stilizzato con tuta spaziale blu
+- Caratteristiche:
+  - Visiera luminosa
+  - Jetpack per il salto
+  - Tuta spaziale dettagliata
+- Abilità: Salto potenziato con jetpack
 
-### Piattaforme
-- Le piattaforme normali scompaiono gradualmente dopo essere state toccate
-- Il pavimento (piattaforma più bassa) è permanente
-- Usa le piattaforme strategicamente per raggiungere le monete più alte
+### UFO (Nemici)
+- Design: Disco volante viola con luci
+- Caratteristiche:
+  - Cupola trasparente
+  - Luci lampeggianti
+  - Movimento fluttuante
+- Comportamento: Pattuglia l'area in modo imprevedibile
 
-### Nemici
-- Appaiono ogni 4 secondi
-- Si muovono avanti e indietro in un'area definita
-- Il contatto con un nemico costa una vita
+## 🌟 Power-Ups
+
+### Stella dell'Invincibilità
+- **Effetto**: Rende temporaneamente invincibile
+- **Durata**: 5 secondi
+- **Bonus**:
+  - +100 punti alla raccolta
+  - Possibilità di distruggere gli UFO
+  - Effetti visivi speciali
+- **Frequenza**: Appare ogni 10 secondi
+
+## 💎 Oggetti Collezionabili
 
 ### Monete
-- Appaiono ogni 2 secondi
-- Si muovono orizzontalmente
-- Scompaiono quando raccolte
+- **Valore**: 50 punti
+- **Comportamento**: Si muovono orizzontalmente
+- **Effetto**: Creano particelle dorate quando raccolte
+- **Frequenza**: Appaiono ogni 2 secondi
 
-### Bordi dello Schermo
-- Attraversando un bordo laterale riappari dal lato opposto
-- Cadere dal fondo dello schermo costa una vita
+## 🏆 Sistema di Punteggio
+
+### Punti
+- **Monete**: +50 punti
+- **Stella**: +100 punti
+- **Distruzione UFO**: +30 punti (solo con invincibilità)
+
+### Record
+- Salvataggio automatico del punteggio più alto
+- Schermata speciale quando si batte il record
+- Visualizzazione del record corrente durante il gioco
+
+## 💫 Effetti Speciali
+- Stelle brillanti sullo sfondo
+- Particelle quando si raccolgono le monete
+- Esplosione quando si distruggono gli UFO
+- Effetto arcobaleno durante l'invincibilità
+- Screen shake quando si viene colpiti
+
+## ❤️ Sistema di Vite
+- Inizi con 3 vite
+- Perdi una vita quando:
+  - Vieni colpito da un UFO
+  - Cadi fuori dallo schermo
+- Game Over quando finisci le vite
 
 ## 🛠️ Tecnologie Utilizzate
 - HTML5
@@ -81,18 +117,31 @@ cd [nome-directory]
 - JavaScript
 - [Kaboom.js](https://kaboomjs.com/) v3000.0.1
 
-## 🔍 Debug
-- Modalità debug disponibile (mostra le aree di collisione)
-- Attivabile/disattivabile tramite la costante `DEBUG`
-
-## 📝 Note di Sviluppo
-- Il gioco utilizza una gravità personalizzata per un feeling più arcade
-- Sistema di collisioni ottimizzato
-- Gestione degli errori implementata per maggiore stabilità
-
 ## 🎯 Prossimi Aggiornamenti
-- [ ] Aggiunta di effetti sonori
-- [ ] Powerup speciali
-- [ ] Livelli multipli
-- [ ] Classifica dei punteggi
-- [ ] Modalità difficoltà
+- [ ] Nuovi tipi di power-up
+- [ ] Livelli aggiuntivi
+- [ ] Boss battles
+- [ ] Classifica online
+- [ ] Effetti sonori spaziali
+- [ ] Nuovi tipi di nemici
+
+## 🐛 Debug
+La modalità debug può essere attivata/disattivata modificando la costante `DEBUG` all'inizio del file `game.js`
+
+## 🔧 Installazione
+
+1. Clona il repository:
+```bash
+git clone [url-del-repository]
+```
+
+2. Naviga nella directory:
+```bash
+cd [nome-directory]
+```
+
+3. Apri `index.html` nel browser o usa un server locale
+
+---
+
+Sviluppato con ❤️ usando Kaboom.js
