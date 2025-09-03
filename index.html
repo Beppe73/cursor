@@ -32,20 +32,47 @@
             font-size: 24px;
             display: none;
         }
+        #audioControl {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 32px;
+            height: 32px;
+            cursor: pointer;
+            z-index: 1000;
+        }
     </style>
 </head>
 <body>
-    <div id="game-container">
+        <div id="game-container">
+        <img src="assets/audioOn.png" 
+             id="audioControl" 
+             class="audio-control" 
+             tabindex="-1"
+             alt="Audio control">
         <div id="loading">Loading...</div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/kaboom@3000.0.1/dist/kaboom.js"></script>
     <script>
+        // Inizializza lo stato dell'audio
+        window.soundEnabled = true;
+        
         // Mostra il messaggio di caricamento
         document.getElementById('loading').style.display = 'block';
         
         // Nascondi il messaggio quando Kaboom è caricato
         window.addEventListener('load', () => {
             document.getElementById('loading').style.display = 'none';
+        });
+
+        // Configura il controllo audio
+        const audioControl = document.getElementById('audioControl');
+        audioControl.addEventListener('click', () => {
+            window.soundEnabled = !window.soundEnabled;
+            audioControl.src = window.soundEnabled ? 'assets/audioOn.png' : 'assets/audioOff.png';
+            console.log('Audio stato:', window.soundEnabled);  // Debug log
+            // Reimposta il focus sul canvas del gioco
+            document.querySelector('canvas').focus();
         });
     </script>
     <script src="game.js"></script>

@@ -12,12 +12,12 @@ const GROUND_TOP   = GAME_HEIGHT - GROUND_HEIGHT;
 const DEBUG        = true; // Flag di debug
 
 // Flag per l'audio
-let soundEnabled = false;
+window.soundEnabled = false; // Usiamo window.soundEnabled per condividere lo stato con l'HTML
 
 // Colori del gioco
 const COLORS = {
     player: [0, 150, 255],    // Blu astronauta
-    enemy: [255, 0, 100],     // Rosa UFO
+    enemy: [143, 0, 255],     // Viola UFO (#8f00ff)
     coin: [255, 215, 0],      // Oro
     star: [255, 255, 100],    // Giallo brillante
     platform: [100, 200, 100], // Verde
@@ -53,7 +53,7 @@ try {
 
     // Funzione per riprodurre i suoni
     window.playSoundEffect = (name) => {
-      if (!soundEnabled) return;
+      if (!window.soundEnabled) return;
       
       let synth;
       switch (name) {
@@ -162,67 +162,6 @@ scene("game", () => {
   let score = 0; // Punteggio iniziale
   let lives = 3; // Sistema vite
   setGravity(GRAVITY) // Usiamo setGravity invece di gravity
-
-  // Aggiungiamo il pulsante audio elegante e compatto
-  const audioButton = add([
-    rect(120, 40),
-    pos(GAME_WIDTH / 2 - 60, 15),
-    color(255, 215, 0),
-    outline(3),
-    fixed(),
-    area(),
-    "soundButton"
-  ]);
-
-  const audioText = add([
-    text("🔊", { 
-      size: 24,
-      font: "arial",
-    }),
-    pos(GAME_WIDTH / 2 - 50, 23),  // Centrato con il pulsante
-    color(0, 0, 0),  // Testo nero per contrasto
-    fixed(),
-    z(101),  // Sopra il pulsante
-    "soundText",
-  ]);
-
-  // Click sul pulsante audio
-  onClick("soundButton", () => {
-    soundEnabled = !soundEnabled;
-    destroyAll("soundText");
-    
-    // Effetto esplosione al click
-    for (let i = 0; i < 16; i++) {
-      const angle = (i / 16) * 2 * Math.PI;
-      add([
-        circle(4),
-        pos(audioButton.pos.add(100, 35)),
-        color(255, 215, 0),
-        fixed(),
-        z(99),
-        move(vec2(Math.cos(angle), Math.sin(angle)), 200),
-        lifespan(0.5),
-      ]);
-    }
-    
-    add([
-      text(soundEnabled ? "🔊 ON" : "🔊 OFF", { 
-        size: 24,
-        font: "arial",
-      }),
-      pos(GAME_WIDTH / 2 - 50, 23),
-      color(0, 0, 0),
-      fixed(),
-      z(101),
-      "soundText"
-    ]);
-
-    // Effetto di click più evidente
-    audioButton.color = soundEnabled ? rgb(100, 255, 100) : rgb(255, 215, 0);
-    audioButton.scale = vec2(0.9);
-    shake(5);
-    wait(0.2, () => audioButton.scale = vec2(1));
-  });
 
   const scoreText = add([
     text("Punteggio: 0", { size: 24 }),
@@ -371,7 +310,7 @@ scene("game", () => {
   onCollide("player", "coin", (p, c) => {
     destroy(c);
     score += 50;
-    if (soundEnabled) {
+    if (window.soundEnabled) {
       playSoundEffect("powerup");
     }
     // Effetto particelle
@@ -393,11 +332,9 @@ scene("game", () => {
     destroy(s);
     isInvincible = true;
     score += 100;
-    if (soundEnabled) {
-      playSoundEffect("powerup");
-    }
-    
-    // Effetto visivo invincibilità
+      if (window.soundEnabled) {
+        playSoundEffect("powerup");
+      }    // Effetto visivo invincibilità
     const colors = [
       rgb(255, 0, 0),
       rgb(255, 165, 0),
@@ -426,7 +363,7 @@ scene("game", () => {
     if (!isInvincible) {
       lives--;
       livesText.text = `Vite: ${lives}`;
-      if (soundEnabled) {
+      if (window.soundEnabled) {
         playSoundEffect("explosion");
       }
       shake(10);
@@ -528,7 +465,7 @@ scene("game", () => {
    onKeyDown("space", () => {
     if (player.exists() && player.isGrounded()) {
           player.jump(JUMP_FORCE);
-          if (soundEnabled) {
+          if (window.soundEnabled) {
             playSoundEffect("jump");
           }
      }
