@@ -32,14 +32,29 @@ try {
 
 // Scena Game Over
 scene("gameOver", (score) => {
-    add([
-        text(`Game Over!\nPunteggio finale: ${score}`, {
-            size: 48,
-            align: "center"
-        }),
-        pos(center()),
-        anchor("center"),
-    ]);
+    // Verifica e aggiorna il record
+    const highScore = parseInt(localStorage.getItem("highScore")) || 0;
+    if (score > highScore) {
+        localStorage.setItem("highScore", score.toString());
+        add([
+            text(`Nuovo Record!\nPunteggio finale: ${score}`, {
+                size: 48,
+                align: "center"
+            }),
+            pos(center()),
+            anchor("center"),
+            color(255, 215, 0), // colore oro per il nuovo record
+        ]);
+    } else {
+        add([
+            text(`Game Over!\nPunteggio finale: ${score}`, {
+                size: 48,
+                align: "center"
+            }),
+            pos(center()),
+            anchor("center"),
+        ]);
+    }
 
     add([
         text("Premi SPAZIO per ricominciare", {
@@ -82,6 +97,15 @@ scene("game", () => {
     fixed(),
   ]);
 
+  // Recupera il punteggio più alto dal localStorage
+  const highScore = parseInt(localStorage.getItem("highScore")) || 0;
+  
+  const highScoreText = add([
+    text(`Record: ${highScore}`, { size: 24 }),
+    pos(20, 80),
+    fixed(),
+  ]);
+
   // Funzione per il movimento a pattuglia dei nemici
   function patrol(distance = 100) {
     let dir = 1;
@@ -113,6 +137,32 @@ scene("game", () => {
     ]);
   }
 
+  // Spawn power-up stella
+  function spawnStar() {
+    add([
+      rect(16, 16),  // Usiamo un quadrato più grande delle monete
+      pos(rand(0, GAME_WIDTH), rand(100, GROUND_TOP)),
+      color(255, 255, 0),  // Colore giallo brillante
+      area(),
+      "star",
+      {
+        time: 0,
+        update() {
+          this.time += dt();
+          // Fa brillare la stella cambiando l'opacità
+          this.opacity = Math.abs(Math.sin(this.time * 5));
+          // Fa ruotare il quadrato
+          this.angle += dt() * 120;
+        },
+      },
+    ]);
+  }
+
+  // Spawn stella ogni 10 secondi
+  loop(10, () => {
+    spawnStar();
+  });
+
   // Spawn nemici
   function spawnEnemy() {
     const enemy = add([
@@ -139,17 +189,81 @@ scene("game", () => {
   onCollide("player", "coin", (p, c) => {
     destroy(c);
     score += 50;
-    // play("coin"); // Suono da aggiungere se disponibile
+    // Effetto particelle
+    for (let i = 0; i < 5; i++) {
+      add([
+        circle(2),
+        pos(c.pos),
+        color(255, 215, 0),
+        move(rand(vec2(-1)), rand(60, 120)),
+        lifespan(0.5),
+      ]);
+    }
+  });
+
+  // Variabile per tracciare l'invincibilità
+  let isInvincible = false;
+
+  onCollide("player", "star", (p, s) => {
+    destroy(s);
+    isInvincible = true;
+    score += 100;
+    
+    // Effetto visivo invincibilità
+    const colors = [
+      rgb(255, 0, 0),
+      rgb(255, 165, 0),
+      rgb(255, 255, 0),
+      rgb(0, 255, 0),
+      rgb(0, 0, 255),
+      rgb(238, 130, 238),
+    ];
+    let colorIndex = 0;
+    
+    const invincibleEffect = add([
+      text("⭐", { size: 32 }),
+      pos(player.pos.add(0, -40)),
+      follow(player, vec2(0, -40)),
+      lifespan(5),
+    ]);
+    
+    // Timer per disattivare l'invincibilità
+    wait(5, () => {
+      isInvincible = false;
+      destroy(invincibleEffect);
+    });
   });
 
   onCollide("player", "enemy", (p, e) => {
-    lives--;
-    livesText.text = `Vite: ${lives}`;
-    destroy(e);
-    shake(10);
-    
-    if (lives <= 0) {
-      go("gameOver", score);
+    if (!isInvincible) {
+      lives--;
+      livesText.text = `Vite: ${lives}`;
+      shake(10);
+      
+      // Effetto lampeggio rosso
+      p.color = rgb(255, 0, 0);
+      wait(0.2, () => {
+        p.color = rgb(255, 100, 100);
+      });
+      
+      if (lives <= 0) {
+        go("gameOver", score);
+      }
+    } else {
+      // Se invincibile, distrugge il nemico
+      destroy(e);
+      score += 30;
+      // Effetto esplosione
+      for (let i = 0; i < 8; i++) {
+        const angle = (i / 8) * 2 * Math.PI;
+        add([
+          rect(4, 4),
+          pos(e.pos),
+          color(255, 0, 0),
+          move(vec2(Math.cos(angle), Math.sin(angle)), 100),
+          lifespan(0.5),
+        ]);
+      }
     }
   });
 
@@ -180,31 +294,12 @@ scene("game", () => {
       area(),
       body({ isStatic: true }),
       "platform",
-      p.y < GROUND_TOP ? {
-        fadeAway: false,
-        timer: 0,
-        opacity: 1,
-        update() {
-          if (this.fadeAway) {
-            this.timer += dt();
-            if (this.timer >= 1) {
-              this.opacity -= 0.1;
-              this.color.r = 100 * this.opacity;
-              this.color.g = 200 * this.opacity;
-              this.color.b = 100 * this.opacity;
-              if (this.opacity <= 0) destroy(this);
-            }
-          }
-        },
-      } : {},
     ]);
   }
 
-  // Attiva fadeAway quando il player tocca una piattaforma
-  onCollide("player", "platform", (p, plat) => {
-    if (plat.pos.y < GROUND_TOP && plat.fadeAway === false) {
-      plat.fadeAway = true;
-    }
+  // Collisione tra nemici e piattaforme
+  onCollide("enemy", "platform", (e, p) => {
+    // La collisione esiste ma non fa nulla
   });
 
   // Funzione per gestire il movimento del giocatore
@@ -228,15 +323,20 @@ scene("game", () => {
    onKeyDown("space", () => {
     if (player.exists() && player.isGrounded()) {
           player.jump(JUMP_FORCE);
-          score += 10;
-          scoreText.text = `Punteggio: ${score}`;
-
-
      }
   });
 
-  // Gestione caduta fuori dallo schermo
+  // Gestione movimenti e limiti del giocatore
    player.onUpdate(() => {
+     // Limita il movimento orizzontale del player
+     if (player.pos.x < 0) {
+         player.pos.x = 0;
+     }
+     if (player.pos.x > GAME_WIDTH - 32) { // 32 è la larghezza del player
+         player.pos.x = GAME_WIDTH - 32;
+     }
+     
+     // Gestione caduta fuori dallo schermo
      if (player.pos.y > GAME_HEIGHT + 50) {
         lives--;
         livesText.text = `Vite: ${lives}`;
@@ -254,14 +354,6 @@ scene("game", () => {
     debug.showArea = true;
   }
 });
-onUpdate("player", (p) => {
-	if (p.pos.x < 0) {
-		p.pos.x = width()
-	}
-	if (p.pos.x > width()) {
-		p.pos.x = 0
-	}
-})
 
 // ==========================
 // Funzioni Utili
