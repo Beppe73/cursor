@@ -1,0 +1,1 @@
+Crea un gioco HTML, CSS più JavaScript usando Kaboom.js dove un giocatore può muoversi a sinistra e a destra e saltare su piattaforme. Usa una semplice forma quadrata invece di sprite. Imposta una logica di gioco
