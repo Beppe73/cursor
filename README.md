@@ -18,17 +18,19 @@ Un eccitante gioco platform ambientato nello spazio, dove controlli un astronaut
 - Punteggio e record personale
 - Effetti particellari e visuali
 - Movimento fluido dei personaggi
+- Controllo audio con feedback visivo
+- Effetti sonori per salti, power-up e collisioni
 
 ## 🚀 Installazione
 
 1. Clona il repository:
 ```bash
-git clone [url-del-repository]
+git clone https://github.com/Beppe73/cursor.git
 ```
 
 2. Naviga nella directory del progetto:
 ```bash
-cd [nome-directory]
+cd cursor
 ```
 
 3. Apri il file `index.html` nel tuo browser preferito
@@ -41,6 +43,7 @@ cd [nome-directory]
 - **Freccia Sinistra**: Muovi l'astronauta a sinistra
 - **Freccia Destra**: Muovi l'astronauta a destra
 - **Barra Spaziatrice**: Attiva il jetpack per saltare
+- **Icona Audio**: Attiva/disattiva gli effetti sonori
 
 ### Obiettivi
 1. Raccogli più monete possibili per aumentare il punteggio
@@ -59,7 +62,7 @@ cd [nome-directory]
 - Abilità: Salto potenziato con jetpack
 
 ### UFO (Nemici)
-- Design: Disco volante viola con luci
+- Design: Disco volante viola brillante (#8f00ff) con luci
 - Caratteristiche:
   - Cupola trasparente
   - Luci lampeggianti
@@ -122,26 +125,12 @@ cd [nome-directory]
 - [ ] Livelli aggiuntivi
 - [ ] Boss battles
 - [ ] Classifica online
-- [ ] Effetti sonori spaziali
+- [x] Effetti sonori spaziali
 - [ ] Nuovi tipi di nemici
 
 ## 🐛 Debug
 La modalità debug può essere attivata/disattivata modificando la costante `DEBUG` all'inizio del file `game.js`
 
-## 🔧 Installazione
-
-1. Clona il repository:
-```bash
-git clone [url-del-repository]
-```
-
-2. Naviga nella directory:
-```bash
-cd [nome-directory]
-```
-
-3. Apri `index.html` nel browser o usa un server locale
-
 ---
 
-Sviluppato con ❤️ usando Kaboom.js
+Sviluppato con ❤️ usando Kaboom.js da Giuseppe Rubino (brubino.eth)
